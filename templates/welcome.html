@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Welcome</title>
+
+    <style>
+        .welcome-box {
+            width: 400px;
+            margin: 100px auto;
+            padding: 30px;
+            text-align: center;
+            border-radius: 15px;
+            background-color: #a2a7a2;
+            animation: fadeSlideIn 0.8s ease-out;
+        }
+
+        h1 {
+            color: rgb(68, 110, 5);
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 12px;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        @keyframes fadeSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="welcome-box">
+    <h1 id="welcomeText">Welcome</h1>
+    <p>You have successfully logged in</p>
+    <button onclick="logout()">Logout</button>
+</div>
+
+<script>
+    const username = localStorage.getItem("user_name_key"); 
+
+    if (!username) {
+        window.location.href = "/login";
+    } else {
+        document.getElementById("welcomeText").innerText =
+            "Welcome " + username;
+    }
+
+    function logout() {
+        localStorage.removeItem("user_name_key");
+        window.location.href = "/login";
+    }
+</script>
+
+</body>
+</html>

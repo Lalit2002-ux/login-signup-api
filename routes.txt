@@ -1,0 +1,83 @@
+Yes — you can directly define routes in HTML, but only in a very limited way. Let me explain simply so you understand why JavaScript is used and when HTML alone is enough.
+
+✅ 1. Sending Data Using ONLY HTML (No JavaScript)
+
+HTML has a built-in feature called a form action that can send data directly to your FastAPI backend.
+
+Example:
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>Signup</h2>
+
+<form action="http://127.0.0.1:8000/signup" method="post">
+  <input type="text" name="username" placeholder="Enter username" required>
+  <br><br>
+
+  <input type="email" name="email" placeholder="Enter email" required>
+  <br><br>
+
+  <input type="password" name="password" placeholder="Enter password" required>
+  <br><br>
+
+  <button type="submit">Signup</button>
+</form>
+
+</body>
+</html>
+
+
+👉 What happens here:
+
+User clicks Signup
+
+Browser sends POST request to FastAPI
+
+Page reloads
+
+Response is shown as a new page
+
+✔ No JavaScript needed
+✔ Very easy
+❌ Looks outdated
+❌ Full page reload
+❌ Cannot show instant errors
+❌ Poor user experience
+
+👉 This is how websites worked in 2005–2012 era 😄
+
+✅ 2. Why JavaScript is Used (Modern Way)
+
+JavaScript lets you send API requests without reloading the page.
+
+Example using fetch():
+<form id="signupForm">
+  <input type="text" id="username" placeholder="Username">
+  <input type="email" id="email" placeholder="Email">
+  <input type="password" id="password" placeholder="Password">
+  <button type="submit">Signup</button>
+</form>
+
+<script>
+document.getElementById("signupForm").addEventListener("submit", async function(e){
+    e.preventDefault(); // stop page reload
+
+    const data = {
+        username: document.getElementById("username").value,
+        email: document.getElementById("email").value,
+        password: document.getElementById("password").value
+    };
+
+    const res = await fetch("http://127.0.0.1:8000/signup", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+    });
+
+    const result = await res.json();
+    alert(result.message);
+});
+</script>

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Signup page</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .formstyle {
+            width: 400px;
+            padding: 20px;
+            border-radius: 15px;
+            background-color: transparent;
+
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #15880f;
+            border-radius: 10px;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 10px;
+            padding: 12px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 13px;
+            transition: background-color 0.5s ease;
+        }
+
+        button:hover {
+            background-color: #101010;
+
+        }
+
+        h2 {
+            text-align: center;
+            color: rgb(68, 110, 5);
+            font-size: 35px;
+            margin-top: 10px;
+            font-weight: 500;
+
+        }
+
+        #error {
+            color: red;
+            text-align: center;
+        }
+
+        /* animation keyframes */
+        @keyframes fadeSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* apply animation */
+        .welcome-box {
+            animation: fadeSlideIn 0.8s ease-out;
+        }
+
+        .form-labels {
+            font-weight: bold;
+            color: #0a800e;
+            font-weight: bold;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        body {
+            display: flex;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background-color: hsl(0, 0%, 100%);
+        }
+
+        .loader {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page-container" style=" flex:1; display: flex; align-items: center; justify-content: center;">
+        <div class="formstyle   welcome-box">
+            <h2 style="display: flex; gap: 10px;">GET STARTED <span style="color: rgb(30, 27, 27);">NOW</span></h2>
+
+
+            <form id="signupForm">
+
+                <label for="username" class="form-labels">Name:</label><br>
+                <input type="text" name="username" placeholder="Enter Name" required>
+
+                <label for="email" class="form-labels">Email:</label><br>
+                <input type="email" name="email" placeholder="Enter Email" required>
+
+                <label for="password" class="form-labels">Password:</label>
+                <input type="password" name="password" placeholder="Enter Password" required>
+
+                <button type="submit" class="signup-btn" id="signupBtn">
+                    Signup
+                </button>
+
+
+                </button>
+            </form>
+
+            <p id="error"></p>
+
+            <p>Already have an account ?
+                <a href="/login"> <span style="color: rgb(24, 142, 24); ">Login here</span> </a>
+            </p>
+
+        </div>
+
+
+
+    </div>
+
+    <div class="secdiv" style="flex: 1;">
+        <img src="https://images.unsplash.com/photo-1525498128493-380d1990a112?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            alt="Signup Image" style="width: 100%; height:100vh;  object-fit: cover;
+    object-position: center right;  display: block;">
+    </div>
+
+
+        <script>
+    document.getElementById("signupForm").addEventListener("submit", async function (e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);   // gather form data
+        const error = document.getElementById("error");
+        const btn = document.getElementById("signupBtn");
+
+        // clear previous errors
+        error.innerText = "";
+
+        // loading state ON
+        btn.disabled = true;
+        btn.innerHTML = `<span class="loader"></span> Creating...`;
+
+        try {
+            const response = await fetch("/signup", {   // send POST request to /signup with form data
+                method: "POST",
+                body: formData
+            });
+
+            const data = await response.json();   // parse response as JSON
+
+            if (data.success) {
+                window.location.href = "/login";
+            } else {
+                error.innerText = data.message;
+            }
+        } catch (err) {
+            error.innerText = "Something went wrong. Please try again.";
+        } finally {
+            // restore button if signup fails
+            btn.disabled = false;
+            btn.innerHTML = "Signup";
+        }
+    });
+</script>
+
+
+</body>
+
+</html>
